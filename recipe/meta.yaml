@@ -39,10 +39,16 @@ test:
     - pip
 
 about:
-  home: http://github.com/TkTech/pysimdjson
+  home: https://github.com/TkTech/pysimdjson
   summary: simdjson bindings for python
+  description: |
+    Python bindings for the simdjson project, a SIMD-accelerated JSON parser.
+    If SIMD instructions are unavailable a fallback parser is used, making pysimdjson safe to use anywhere.
   license_file: LICENSE
-  license: Apache-2.0 and MIT
+  license: Apache-2.0 OR MIT
+  license_family: Other
+  doc_url: https://github.com/TkTech/pysimdjson
+  dev_url: https://pysimdjson.tkte.ch/
 
 extra:
   recipe-maintainers:
