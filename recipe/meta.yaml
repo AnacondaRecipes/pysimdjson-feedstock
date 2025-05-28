@@ -1,5 +1,5 @@
 {% set name = "pysimdjson" %}
-{% set version = "5.0.2" %}
+{% set version = "6.0.2" %}
 
 
 package:
@@ -8,24 +8,26 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 83010f07f9ca38e4557b61860acfeb0a897b416f06f73182ffaffa94bdb7394d
+  sha256: ddbd6fecd42aa01c5c87d3c79b8ede1885b6763337d21745587a5392572c1f45
 
 build:
-  number: 1
-  skip: true  # [py<36]
-  script: {{ PYTHON }} -m pip install . -vv
+  number: 0
+  # Upstream does not support python 3.13 for this version,
+  # which is needed for pystan 3.10.0
+  skip: true  # [py<39 or py>=313]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
     - python                                 # [build_platform != target_platform]
     - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - cython                                 # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
   host:
     - pip
     - python
-    - cython
+    - wheel
+    - setuptools
   run:
     - python
 
@@ -38,10 +40,16 @@ test:
     - pip
 
 about:
-  home: http://github.com/TkTech/pysimdjson
+  home: https://github.com/TkTech/pysimdjson
   summary: simdjson bindings for python
+  description: |
+    Python bindings for the simdjson project, a SIMD-accelerated JSON parser.
+    If SIMD instructions are unavailable a fallback parser is used, making pysimdjson safe to use anywhere.
   license_file: LICENSE
-  license: Apache-2.0 and MIT
+  license: Apache-2.0 AND MIT
+  license_family: Other
+  dev_url: https://github.com/TkTech/pysimdjson
+  doc_url: https://pysimdjson.tkte.ch/
 
 extra:
   recipe-maintainers:
