@@ -13,7 +13,7 @@ source:
 build:
   number: 0
   # Upstream does not support python 3.13 for this version,
-  # which is needed for the latest pystan
+  # which is needed for pystan 3.10.0
   skip: true  # [py<39 or py>=313]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
