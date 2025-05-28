@@ -46,10 +46,10 @@ about:
     Python bindings for the simdjson project, a SIMD-accelerated JSON parser.
     If SIMD instructions are unavailable a fallback parser is used, making pysimdjson safe to use anywhere.
   license_file: LICENSE
-  license: Apache-2.0 OR MIT
+  license: Apache-2.0 AND MIT
   license_family: Other
-  doc_url: https://github.com/TkTech/pysimdjson
-  dev_url: https://pysimdjson.tkte.ch/
+  dev_url: https://github.com/TkTech/pysimdjson
+  doc_url: https://pysimdjson.tkte.ch/
 
 extra:
   recipe-maintainers:
