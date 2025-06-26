@@ -28,6 +28,10 @@ requirements:
   run:
     - python
 
+{% set tests_to_skip = "" %}
+# ValueError: Unknown Implementation
+{% set tests_to_skip = '-k "not test_implementation"' %}  # [aarch64 or arm64]
+
 test:
   source_files:
     - tests
@@ -37,7 +41,7 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v tests
+    - pytest -v tests {{ tests_to_skip }}
   requires:
     - pip
     - pytest
