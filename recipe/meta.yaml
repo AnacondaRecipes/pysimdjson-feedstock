@@ -1,43 +1,51 @@
 {% set name = "pysimdjson" %}
-{% set version = "6.0.2" %}
-
+{% set version = "7.0.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: ddbd6fecd42aa01c5c87d3c79b8ede1885b6763337d21745587a5392572c1f45
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: da6a23d8cbb9096d41fe6db2906ab6e6c0a2f42a652c9781eaf052049fe8783f
+  url: https://github.com/TkTech/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 5bec85c97784a97a07983823aa532a2504d25e6a4be724504ecfcda5c7ab177a
 
 build:
   number: 0
-  # Upstream does not support python 3.13 for this version,
-  # which is needed for pystan 3.10.0
-  skip: true  # [py<39 or py>=313]
+  skip: true  # [py<39]
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
   host:
     - pip
     - python
+    - setuptools >=74.1
     - wheel
-    - setuptools
+    - cython
   run:
     - python
 
+{% set tests_to_skip = "" %}
+# ValueError: Unknown Implementation
+{% set tests_to_skip = '-k "not test_implementation"' %}  # [aarch64 or arm64]
+
 test:
+  source_files:
+    - tests
+    - jsonexamples
   imports:
     - simdjson
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v tests {{ tests_to_skip }}
   requires:
     - pip
+    - pytest >=8.3.4
 
 about:
   home: https://github.com/TkTech/pysimdjson
@@ -49,7 +57,7 @@ about:
   license: Apache-2.0 AND MIT
   license_family: Other
   dev_url: https://github.com/TkTech/pysimdjson
-  doc_url: https://pysimdjson.tkte.ch/
+  doc_url: https://pysimdjson.tkte.ch
 
 extra:
   recipe-maintainers:
